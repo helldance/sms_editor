@@ -5,6 +5,8 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.res.Resources;
 import android.text.Html;
+import android.text.method.LinkMovementMethod;
+import android.widget.TextView;
 
 /**
  * @Author yangw
@@ -24,13 +26,21 @@ public class DialogBuilder {
             @Override
             public void run() {
                 AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-                builder.setTitle(title).setMessage(Html.fromHtml(msg)).setCancelable(cancelAble)
-                        .setPositiveButton(activity.getResources().getString(android.R.string.ok), new DialogInterface.OnClickListener() {
+
+                TextView textView = new TextView(activity);
+                textView.setPadding(72, 72, 72, 72);
+                textView.setMovementMethod(LinkMovementMethod.getInstance());
+                textView.setClickable(true);
+                textView.setText(Html.fromHtml(msg));
+
+                builder.setTitle(title).setView(textView).setCancelable(cancelAble)
+                        .setPositiveButton(res.getString(android.R.string.ok), new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 dialog.cancel();
                             }
-                        }).create().show();
+                        });
+                builder.create().show();
             }
         });
     }
